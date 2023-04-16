@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "github.com/sethp-org/proto/internal/log;log";
+
+import "google/protobuf/timestamp.proto";
+
+message LogMetadata {
+    oneof metadata {
+        LogMetadataReport report = 1;
+        LogMetadataOnline online = 2;
+    }
+}
+
+message LogMetadataReport {
+    int32 count = 1;
+}
+
+message LogMetadataOnline {
+    int32 count = 1;
+    int32 logout_count = 2;
+    int32 online = 3;
+    string online_format = 4;
+}
+
+message LogEntry {
+    google.protobuf.Timestamp date = 1;
+    string text = 2;
+    string raw = 3;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "site-backend/;site_backend";
+
+import "google/protobuf/empty.proto";
+import "log.proto";
+
+service SiteBackend {
+  rpc SendLogs(SendLogsRequest) returns (google.protobuf.Empty);
+}
+
+message SendLogsRequest {
+    LogMetadata metadata = 1;
+    repeated LogEntry logs = 2;
+}

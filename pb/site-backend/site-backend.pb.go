@@ -7,7 +7,7 @@
 package site_backend
 
 import (
-	log "github.com/sethp-org/proto/internal/log"
+	log "github.com/sethp-org/proto/pb/log"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/sethp-org/proto/internal/log;log";
+option go_package = "github.com/sethp-org/proto/pb/log;log";
 
 import "google/protobuf/timestamp.proto";
 

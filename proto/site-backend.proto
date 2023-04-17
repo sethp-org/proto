@@ -27,4 +27,5 @@ message GetUsersResponse {
 message User {
     int32 id = 1;
     string nickname = 2;
+    int32 server_id = 3;
 }

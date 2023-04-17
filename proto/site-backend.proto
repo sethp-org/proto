@@ -7,9 +7,23 @@ import "log.proto";
 
 service SiteBackend {
   rpc SendLogs(SendLogsRequest) returns (google.protobuf.Empty);
+  rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 }
 
 message SendLogsRequest {
     LogMetadata metadata = 1;
     repeated LogEntry logs = 2;
+}
+
+message GetUsersRequest {
+    int32 server_id = 1;
+}
+
+message GetUsersResponse {
+    repeated User users = 1;
+}
+
+message User {
+    int32 id = 1;
+    string nickname = 2;
 }

@@ -13,6 +13,7 @@ service SiteBackend {
 message SendLogsRequest {
     LogMetadata metadata = 1;
     repeated LogEntry logs = 2;
+    int32 user_id = 3;
 }
 
 message GetUsersRequest {

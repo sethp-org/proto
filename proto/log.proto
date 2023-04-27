@@ -5,10 +5,8 @@ option go_package = "github.com/sethp-org/proto/pb/log;log";
 import "google/protobuf/timestamp.proto";
 
 message LogMetadata {
-    oneof metadata {
-        LogMetadataReport report = 1;
-        LogMetadataOnline online = 2;
-    }
+    LogMetadataOnline online = 1;
+    LogMetadataReport report = 2;
 }
 
 message LogMetadataReport {

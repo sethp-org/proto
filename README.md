@@ -24,3 +24,8 @@ Installation][pbc-install].
 ```sh
     export PATH="$PATH:$(go env GOPATH)/bin"
 ```
+
+## Первый запуск в проекте
+
+`git submodule add https://github.com/sethp-org/proto`
+`git submodule update --remote`

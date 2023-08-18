@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "bot-manager/;bot_manager";
 
-import "google/protobuf/empty.proto";
+// import "google/protobuf/empty.proto";
 
 service BotManager {
   rpc SendCommand(SendBotCommandRequest) returns (SendBotCommandResponse);

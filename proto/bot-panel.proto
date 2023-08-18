@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option go_package = "bot-panel/;bot_panel";
+
+import "google/protobuf/wrappers.proto";
+
+service BotPanel {
+  rpc SendCommand(SendVKCommandRequest) returns (SendVKCommandResponse);
+  rpc HasDostup(HasDostupRequest) returns (google.protobuf.BoolValue);
+}
+
+message SendVKCommandRequest {
+    int32 peer_id = 1;
+    int32 user_id = 2;
+    string command = 3;
+}
+
+message HasDostupRequest {
+    enum BotPanelDostup {
+        SEND_COMMAND = 0;
+    }
+
+    int32 peer_id = 1;
+    int32 user_id = 2;
+    BotPanelDostup dostup = 3;
+    
+}
+
+message SendVKCommandResponse {
+    
+}

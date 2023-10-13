@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BotPanelClient interface {
 	SendCommand(ctx context.Context, in *SendVKCommandRequest, opts ...grpc.CallOption) (*SendVKCommandResponse, error)
+	SendCommandWithout(ctx context.Context, in *SendVKCommandRequest, opts ...grpc.CallOption) (*SendVKCommandResponse, error)
 	HasDostup(ctx context.Context, in *HasDostupRequest, opts ...grpc.CallOption) (*wrapperspb.BoolValue, error)
 }
 
@@ -44,6 +45,15 @@ func (c *botPanelClient) SendCommand(ctx context.Context, in *SendVKCommandReque
 	return out, nil
 }
 
+func (c *botPanelClient) SendCommandWithout(ctx context.Context, in *SendVKCommandRequest, opts ...grpc.CallOption) (*SendVKCommandResponse, error) {
+	out := new(SendVKCommandResponse)
+	err := c.cc.Invoke(ctx, "/BotPanel/SendCommandWithout", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *botPanelClient) HasDostup(ctx context.Context, in *HasDostupRequest, opts ...grpc.CallOption) (*wrapperspb.BoolValue, error) {
 	out := new(wrapperspb.BoolValue)
 	err := c.cc.Invoke(ctx, "/BotPanel/HasDostup", in, out, opts...)
@@ -58,6 +68,7 @@ func (c *botPanelClient) HasDostup(ctx context.Context, in *HasDostupRequest, op
 // for forward compatibility
 type BotPanelServer interface {
 	SendCommand(context.Context, *SendVKCommandRequest) (*SendVKCommandResponse, error)
+	SendCommandWithout(context.Context, *SendVKCommandRequest) (*SendVKCommandResponse, error)
 	HasDostup(context.Context, *HasDostupRequest) (*wrapperspb.BoolValue, error)
 }
 
@@ -67,6 +78,9 @@ type UnimplementedBotPanelServer struct {
 
 func (UnimplementedBotPanelServer) SendCommand(context.Context, *SendVKCommandRequest) (*SendVKCommandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendCommand not implemented")
+}
+func (UnimplementedBotPanelServer) SendCommandWithout(context.Context, *SendVKCommandRequest) (*SendVKCommandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendCommandWithout not implemented")
 }
 func (UnimplementedBotPanelServer) HasDostup(context.Context, *HasDostupRequest) (*wrapperspb.BoolValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HasDostup not implemented")
@@ -101,6 +115,24 @@ func _BotPanel_SendCommand_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotPanel_SendCommandWithout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendVKCommandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotPanelServer).SendCommandWithout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotPanel/SendCommandWithout",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotPanelServer).SendCommandWithout(ctx, req.(*SendVKCommandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _BotPanel_HasDostup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HasDostupRequest)
 	if err := dec(in); err != nil {
@@ -129,6 +161,10 @@ var BotPanel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendCommand",
 			Handler:    _BotPanel_SendCommand_Handler,
+		},
+		{
+			MethodName: "SendCommandWithout",
+			Handler:    _BotPanel_SendCommandWithout_Handler,
 		},
 		{
 			MethodName: "HasDostup",

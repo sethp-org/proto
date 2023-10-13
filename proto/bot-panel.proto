@@ -6,7 +6,7 @@ import "google/protobuf/wrappers.proto";
 
 service BotPanel {
   rpc SendCommand(SendVKCommandRequest) returns (SendVKCommandResponse);
-  rpc SendCommandWithout(SendVKCommandRequest) returns (SendVKCommandResponse);
+  rpc SendCommandWithoutPermissions(SendVKCommandRequest) returns (SendVKCommandResponse);
   rpc HasDostup(HasDostupRequest) returns (google.protobuf.BoolValue);
 }
 

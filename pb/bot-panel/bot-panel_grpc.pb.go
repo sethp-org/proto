@@ -26,6 +26,7 @@ type BotPanelClient interface {
 	SendCommand(ctx context.Context, in *SendVKCommandRequest, opts ...grpc.CallOption) (*SendVKCommandResponse, error)
 	SendCommandWithoutPermissions(ctx context.Context, in *SendVKCommandRequest, opts ...grpc.CallOption) (*SendVKCommandResponse, error)
 	HasDostup(ctx context.Context, in *HasDostupRequest, opts ...grpc.CallOption) (*wrapperspb.BoolValue, error)
+	GetOnline(ctx context.Context, in *BotPanelGetOnlineRequest, opts ...grpc.CallOption) (*BotPanelGetOnlineResponse, error)
 }
 
 type botPanelClient struct {
@@ -63,6 +64,15 @@ func (c *botPanelClient) HasDostup(ctx context.Context, in *HasDostupRequest, op
 	return out, nil
 }
 
+func (c *botPanelClient) GetOnline(ctx context.Context, in *BotPanelGetOnlineRequest, opts ...grpc.CallOption) (*BotPanelGetOnlineResponse, error) {
+	out := new(BotPanelGetOnlineResponse)
+	err := c.cc.Invoke(ctx, "/BotPanel/GetOnline", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BotPanelServer is the server API for BotPanel service.
 // All implementations should embed UnimplementedBotPanelServer
 // for forward compatibility
@@ -70,6 +80,7 @@ type BotPanelServer interface {
 	SendCommand(context.Context, *SendVKCommandRequest) (*SendVKCommandResponse, error)
 	SendCommandWithoutPermissions(context.Context, *SendVKCommandRequest) (*SendVKCommandResponse, error)
 	HasDostup(context.Context, *HasDostupRequest) (*wrapperspb.BoolValue, error)
+	GetOnline(context.Context, *BotPanelGetOnlineRequest) (*BotPanelGetOnlineResponse, error)
 }
 
 // UnimplementedBotPanelServer should be embedded to have forward compatible implementations.
@@ -84,6 +95,9 @@ func (UnimplementedBotPanelServer) SendCommandWithoutPermissions(context.Context
 }
 func (UnimplementedBotPanelServer) HasDostup(context.Context, *HasDostupRequest) (*wrapperspb.BoolValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HasDostup not implemented")
+}
+func (UnimplementedBotPanelServer) GetOnline(context.Context, *BotPanelGetOnlineRequest) (*BotPanelGetOnlineResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOnline not implemented")
 }
 
 // UnsafeBotPanelServer may be embedded to opt out of forward compatibility for this service.
@@ -151,6 +165,24 @@ func _BotPanel_HasDostup_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotPanel_GetOnline_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPanelGetOnlineRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotPanelServer).GetOnline(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotPanel/GetOnline",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotPanelServer).GetOnline(ctx, req.(*BotPanelGetOnlineRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BotPanel_ServiceDesc is the grpc.ServiceDesc for BotPanel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -169,6 +201,10 @@ var BotPanel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HasDostup",
 			Handler:    _BotPanel_HasDostup_Handler,
+		},
+		{
+			MethodName: "GetOnline",
+			Handler:    _BotPanel_GetOnline_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

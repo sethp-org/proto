@@ -6,6 +6,7 @@ option go_package = "bot-manager/;bot_manager";
 
 service BotManager {
   rpc SendCommand(SendBotCommandRequest) returns (SendBotCommandResponse);
+  rpc GetOnline(BotGetOnlineRequest) returns (BotGetOnlineResponse);
 }
 
 message SendBotCommandRequest {
@@ -16,4 +17,15 @@ message SendBotCommandRequest {
 message SendBotCommandResponse {
     string command_id = 1;
     bool success = 2;
+}
+
+message BotGetOnlineRequest {
+  int32 server_id = 1;
+  string nickname = 2;
+}
+
+message BotGetOnlineResponse {
+  string nickname = 1;
+  string reg_ip = 2;
+  string last_ip = 3;
 }

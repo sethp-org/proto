@@ -8,6 +8,7 @@ service BotPanel {
   rpc SendCommand(SendVKCommandRequest) returns (SendVKCommandResponse);
   rpc SendCommandWithoutPermissions(SendVKCommandRequest) returns (SendVKCommandResponse);
   rpc HasDostup(HasDostupRequest) returns (google.protobuf.BoolValue);
+  rpc GetOnline(BotPanelGetOnlineRequest) returns (BotPanelGetOnlineResponse);
 }
 
 message SendVKCommandRequest {
@@ -29,4 +30,15 @@ message HasDostupRequest {
 
 message SendVKCommandResponse {
     
+}
+
+message BotPanelGetOnlineRequest {
+    int32 server_id = 1;
+    string nickname = 2;
+}
+
+message BotPanelGetOnlineResponse {
+    string nickname = 1;
+    string reg_ip = 2;
+    string last_ip = 3;
 }

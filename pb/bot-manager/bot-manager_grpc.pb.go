@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type BotManagerClient interface {
 	SendCommand(ctx context.Context, in *SendBotCommandRequest, opts ...grpc.CallOption) (*SendBotCommandResponse, error)
 	GetOnline(ctx context.Context, in *BotGetOnlineRequest, opts ...grpc.CallOption) (*BotGetOnlineResponse, error)
+	GetOrgMember(ctx context.Context, in *BotGetOrgMemberRequest, opts ...grpc.CallOption) (*BotGetOrgMemberResponse, error)
 }
 
 type botManagerClient struct {
@@ -52,12 +53,22 @@ func (c *botManagerClient) GetOnline(ctx context.Context, in *BotGetOnlineReques
 	return out, nil
 }
 
+func (c *botManagerClient) GetOrgMember(ctx context.Context, in *BotGetOrgMemberRequest, opts ...grpc.CallOption) (*BotGetOrgMemberResponse, error) {
+	out := new(BotGetOrgMemberResponse)
+	err := c.cc.Invoke(ctx, "/BotManager/GetOrgMember", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BotManagerServer is the server API for BotManager service.
 // All implementations should embed UnimplementedBotManagerServer
 // for forward compatibility
 type BotManagerServer interface {
 	SendCommand(context.Context, *SendBotCommandRequest) (*SendBotCommandResponse, error)
 	GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error)
+	GetOrgMember(context.Context, *BotGetOrgMemberRequest) (*BotGetOrgMemberResponse, error)
 }
 
 // UnimplementedBotManagerServer should be embedded to have forward compatible implementations.
@@ -69,6 +80,9 @@ func (UnimplementedBotManagerServer) SendCommand(context.Context, *SendBotComman
 }
 func (UnimplementedBotManagerServer) GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOnline not implemented")
+}
+func (UnimplementedBotManagerServer) GetOrgMember(context.Context, *BotGetOrgMemberRequest) (*BotGetOrgMemberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrgMember not implemented")
 }
 
 // UnsafeBotManagerServer may be embedded to opt out of forward compatibility for this service.
@@ -118,6 +132,24 @@ func _BotManager_GetOnline_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotManager_GetOrgMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotGetOrgMemberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).GetOrgMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/GetOrgMember",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).GetOrgMember(ctx, req.(*BotGetOrgMemberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BotManager_ServiceDesc is the grpc.ServiceDesc for BotManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -132,6 +164,10 @@ var BotManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOnline",
 			Handler:    _BotManager_GetOnline_Handler,
+		},
+		{
+			MethodName: "GetOrgMember",
+			Handler:    _BotManager_GetOrgMember_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

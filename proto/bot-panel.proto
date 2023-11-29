@@ -30,7 +30,12 @@ message HasDostupRequest {
 }
 
 message SendVKCommandResponse {
-    
+    string command_id = 1;
+    bool success_command = 2;
+    bool success_garant = 3;
+    string command_request = 4;
+    string command_response = 5;
+    optional string error = 6;
 }
 
 message BotPanelGetOnlineRequest {

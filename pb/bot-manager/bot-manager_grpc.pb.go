@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BotManagerClient interface {
 	SendCommand(ctx context.Context, in *SendBotCommandRequest, opts ...grpc.CallOption) (*SendBotCommandResponse, error)
+	SendCommandV2(ctx context.Context, in *SendBotCommandV2Request, opts ...grpc.CallOption) (*SendBotCommandV2Response, error)
 	GetOnline(ctx context.Context, in *BotGetOnlineRequest, opts ...grpc.CallOption) (*BotGetOnlineResponse, error)
 	GetOrgMember(ctx context.Context, in *BotGetOrgMemberRequest, opts ...grpc.CallOption) (*BotGetOrgMemberResponse, error)
 }
@@ -38,6 +39,15 @@ func NewBotManagerClient(cc grpc.ClientConnInterface) BotManagerClient {
 func (c *botManagerClient) SendCommand(ctx context.Context, in *SendBotCommandRequest, opts ...grpc.CallOption) (*SendBotCommandResponse, error) {
 	out := new(SendBotCommandResponse)
 	err := c.cc.Invoke(ctx, "/BotManager/SendCommand", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botManagerClient) SendCommandV2(ctx context.Context, in *SendBotCommandV2Request, opts ...grpc.CallOption) (*SendBotCommandV2Response, error) {
+	out := new(SendBotCommandV2Response)
+	err := c.cc.Invoke(ctx, "/BotManager/SendCommandV2", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +77,7 @@ func (c *botManagerClient) GetOrgMember(ctx context.Context, in *BotGetOrgMember
 // for forward compatibility
 type BotManagerServer interface {
 	SendCommand(context.Context, *SendBotCommandRequest) (*SendBotCommandResponse, error)
+	SendCommandV2(context.Context, *SendBotCommandV2Request) (*SendBotCommandV2Response, error)
 	GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error)
 	GetOrgMember(context.Context, *BotGetOrgMemberRequest) (*BotGetOrgMemberResponse, error)
 }
@@ -77,6 +88,9 @@ type UnimplementedBotManagerServer struct {
 
 func (UnimplementedBotManagerServer) SendCommand(context.Context, *SendBotCommandRequest) (*SendBotCommandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendCommand not implemented")
+}
+func (UnimplementedBotManagerServer) SendCommandV2(context.Context, *SendBotCommandV2Request) (*SendBotCommandV2Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendCommandV2 not implemented")
 }
 func (UnimplementedBotManagerServer) GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOnline not implemented")
@@ -110,6 +124,24 @@ func _BotManager_SendCommand_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BotManagerServer).SendCommand(ctx, req.(*SendBotCommandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BotManager_SendCommandV2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendBotCommandV2Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).SendCommandV2(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/SendCommandV2",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).SendCommandV2(ctx, req.(*SendBotCommandV2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -160,6 +192,10 @@ var BotManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendCommand",
 			Handler:    _BotManager_SendCommand_Handler,
+		},
+		{
+			MethodName: "SendCommandV2",
+			Handler:    _BotManager_SendCommandV2_Handler,
 		},
 		{
 			MethodName: "GetOnline",

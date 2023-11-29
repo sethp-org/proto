@@ -6,18 +6,34 @@ option go_package = "bot-manager/;bot_manager";
 
 service BotManager {
   rpc SendCommand(SendBotCommandRequest) returns (SendBotCommandResponse);
+  rpc SendCommandV2(SendBotCommandV2Request) returns (SendBotCommandV2Response);
   rpc GetOnline(BotGetOnlineRequest) returns (BotGetOnlineResponse);
   rpc GetOrgMember(BotGetOrgMemberRequest) returns (BotGetOrgMemberResponse);
+  // rpc RakBot(BotRakBotRequest) returns (BotRakBotResponse);
 }
 
-message SendBotCommandRequest {
-    int32 server_id = 1;
-    string command = 2;
+message SendBotCommandRequest { 
+  int32 server_id = 1;
+  string command = 2;
 }
 
 message SendBotCommandResponse {
     string command_id = 1;
     bool success = 2;
+}
+
+message SendBotCommandV2Request { 
+  int32 server_id = 1;
+  string command = 2;
+}
+
+message SendBotCommandV2Response {
+  string command_id = 1;
+  bool success_command = 2;
+  bool success_garant = 3;
+  string command_request = 4;
+  string command_response = 5;
+  optional string error = 6;
 }
 
 message BotGetOnlineRequest {

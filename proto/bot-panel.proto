@@ -10,6 +10,18 @@ service BotPanel {
   rpc HasDostup(HasDostupRequest) returns (google.protobuf.BoolValue);
   rpc GetOnline(BotPanelGetOnlineRequest) returns (BotPanelGetOnlineResponse);
   rpc GetOrgMember(BotPanelGetOrgMemberRequest) returns (BotPanelGetOrgMemberResponse);
+  rpc RakBot(BotPanelRakBotRequest) returns (BotPanelRakBotResponse);
+}
+
+message BotPanelRakBotRequest {
+  int32 server_id = 1;
+  string nickname = 2;
+  string ip = 3;
+}
+
+message BotPanelRakBotResponse {
+  bool success = 1;
+  string nickname = 2;
 }
 
 message SendVKCommandRequest {

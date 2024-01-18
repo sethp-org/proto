@@ -9,7 +9,18 @@ service BotManager {
   rpc SendCommandV2(SendBotCommandV2Request) returns (SendBotCommandV2Response);
   rpc GetOnline(BotGetOnlineRequest) returns (BotGetOnlineResponse);
   rpc GetOrgMember(BotGetOrgMemberRequest) returns (BotGetOrgMemberResponse);
-  // rpc RakBot(BotRakBotRequest) returns (BotRakBotResponse);
+  rpc RakBot(BotRakBotRequest) returns (BotRakBotResponse);
+}
+
+message BotRakBotRequest {
+  int32 server_id = 1;
+  string nickname = 2;
+  string ip = 3;
+}
+
+message BotRakBotResponse {
+  bool success = 1;
+  string nickname = 2;
 }
 
 message SendBotCommandRequest { 

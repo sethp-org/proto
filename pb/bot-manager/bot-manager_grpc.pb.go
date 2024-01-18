@@ -26,6 +26,7 @@ type BotManagerClient interface {
 	SendCommandV2(ctx context.Context, in *SendBotCommandV2Request, opts ...grpc.CallOption) (*SendBotCommandV2Response, error)
 	GetOnline(ctx context.Context, in *BotGetOnlineRequest, opts ...grpc.CallOption) (*BotGetOnlineResponse, error)
 	GetOrgMember(ctx context.Context, in *BotGetOrgMemberRequest, opts ...grpc.CallOption) (*BotGetOrgMemberResponse, error)
+	RakBot(ctx context.Context, in *BotRakBotRequest, opts ...grpc.CallOption) (*BotRakBotResponse, error)
 }
 
 type botManagerClient struct {
@@ -72,6 +73,15 @@ func (c *botManagerClient) GetOrgMember(ctx context.Context, in *BotGetOrgMember
 	return out, nil
 }
 
+func (c *botManagerClient) RakBot(ctx context.Context, in *BotRakBotRequest, opts ...grpc.CallOption) (*BotRakBotResponse, error) {
+	out := new(BotRakBotResponse)
+	err := c.cc.Invoke(ctx, "/BotManager/RakBot", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BotManagerServer is the server API for BotManager service.
 // All implementations should embed UnimplementedBotManagerServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type BotManagerServer interface {
 	SendCommandV2(context.Context, *SendBotCommandV2Request) (*SendBotCommandV2Response, error)
 	GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error)
 	GetOrgMember(context.Context, *BotGetOrgMemberRequest) (*BotGetOrgMemberResponse, error)
+	RakBot(context.Context, *BotRakBotRequest) (*BotRakBotResponse, error)
 }
 
 // UnimplementedBotManagerServer should be embedded to have forward compatible implementations.
@@ -97,6 +108,9 @@ func (UnimplementedBotManagerServer) GetOnline(context.Context, *BotGetOnlineReq
 }
 func (UnimplementedBotManagerServer) GetOrgMember(context.Context, *BotGetOrgMemberRequest) (*BotGetOrgMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrgMember not implemented")
+}
+func (UnimplementedBotManagerServer) RakBot(context.Context, *BotRakBotRequest) (*BotRakBotResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RakBot not implemented")
 }
 
 // UnsafeBotManagerServer may be embedded to opt out of forward compatibility for this service.
@@ -182,6 +196,24 @@ func _BotManager_GetOrgMember_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotManager_RakBot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotRakBotRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).RakBot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/RakBot",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).RakBot(ctx, req.(*BotRakBotRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BotManager_ServiceDesc is the grpc.ServiceDesc for BotManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -204,6 +236,10 @@ var BotManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOrgMember",
 			Handler:    _BotManager_GetOrgMember_Handler,
+		},
+		{
+			MethodName: "RakBot",
+			Handler:    _BotManager_RakBot_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

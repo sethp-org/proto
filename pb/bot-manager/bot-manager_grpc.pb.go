@@ -27,6 +27,8 @@ type BotManagerClient interface {
 	GetOnline(ctx context.Context, in *BotGetOnlineRequest, opts ...grpc.CallOption) (*BotGetOnlineResponse, error)
 	GetOrgMember(ctx context.Context, in *BotGetOrgMemberRequest, opts ...grpc.CallOption) (*BotGetOrgMemberResponse, error)
 	RakBot(ctx context.Context, in *BotRakBotRequest, opts ...grpc.CallOption) (*BotRakBotResponse, error)
+	PropsList(ctx context.Context, in *BotPropsListRequest, opts ...grpc.CallOption) (*BotPropsListResponse, error)
+	PropsConfirm(ctx context.Context, in *BotPropsConfirmRequest, opts ...grpc.CallOption) (*BotPropsConfirmResponse, error)
 }
 
 type botManagerClient struct {
@@ -82,6 +84,24 @@ func (c *botManagerClient) RakBot(ctx context.Context, in *BotRakBotRequest, opt
 	return out, nil
 }
 
+func (c *botManagerClient) PropsList(ctx context.Context, in *BotPropsListRequest, opts ...grpc.CallOption) (*BotPropsListResponse, error) {
+	out := new(BotPropsListResponse)
+	err := c.cc.Invoke(ctx, "/BotManager/PropsList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botManagerClient) PropsConfirm(ctx context.Context, in *BotPropsConfirmRequest, opts ...grpc.CallOption) (*BotPropsConfirmResponse, error) {
+	out := new(BotPropsConfirmResponse)
+	err := c.cc.Invoke(ctx, "/BotManager/PropsConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BotManagerServer is the server API for BotManager service.
 // All implementations should embed UnimplementedBotManagerServer
 // for forward compatibility
@@ -91,6 +111,8 @@ type BotManagerServer interface {
 	GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error)
 	GetOrgMember(context.Context, *BotGetOrgMemberRequest) (*BotGetOrgMemberResponse, error)
 	RakBot(context.Context, *BotRakBotRequest) (*BotRakBotResponse, error)
+	PropsList(context.Context, *BotPropsListRequest) (*BotPropsListResponse, error)
+	PropsConfirm(context.Context, *BotPropsConfirmRequest) (*BotPropsConfirmResponse, error)
 }
 
 // UnimplementedBotManagerServer should be embedded to have forward compatible implementations.
@@ -111,6 +133,12 @@ func (UnimplementedBotManagerServer) GetOrgMember(context.Context, *BotGetOrgMem
 }
 func (UnimplementedBotManagerServer) RakBot(context.Context, *BotRakBotRequest) (*BotRakBotResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RakBot not implemented")
+}
+func (UnimplementedBotManagerServer) PropsList(context.Context, *BotPropsListRequest) (*BotPropsListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PropsList not implemented")
+}
+func (UnimplementedBotManagerServer) PropsConfirm(context.Context, *BotPropsConfirmRequest) (*BotPropsConfirmResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PropsConfirm not implemented")
 }
 
 // UnsafeBotManagerServer may be embedded to opt out of forward compatibility for this service.
@@ -214,6 +242,42 @@ func _BotManager_RakBot_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotManager_PropsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPropsListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).PropsList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/PropsList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).PropsList(ctx, req.(*BotPropsListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BotManager_PropsConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPropsConfirmRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).PropsConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/PropsConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).PropsConfirm(ctx, req.(*BotPropsConfirmRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BotManager_ServiceDesc is the grpc.ServiceDesc for BotManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -240,6 +304,14 @@ var BotManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RakBot",
 			Handler:    _BotManager_RakBot_Handler,
+		},
+		{
+			MethodName: "PropsList",
+			Handler:    _BotManager_PropsList_Handler,
+		},
+		{
+			MethodName: "PropsConfirm",
+			Handler:    _BotManager_PropsConfirm_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

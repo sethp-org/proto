@@ -3,6 +3,7 @@ syntax = "proto3";
 option go_package = "bot-panel/;bot_panel";
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
 
 service BotPanel {
   rpc SendCommand(SendVKCommandRequest) returns (SendVKCommandResponse);
@@ -11,7 +12,36 @@ service BotPanel {
   rpc GetOnline(BotPanelGetOnlineRequest) returns (BotPanelGetOnlineResponse);
   rpc GetOrgMember(BotPanelGetOrgMemberRequest) returns (BotPanelGetOrgMemberResponse);
   rpc RakBot(BotPanelRakBotRequest) returns (BotPanelRakBotResponse);
+  rpc PropsList(BotPanelPropsListRequest) returns (BotPanelPropsListResponse);
+  rpc PropsConfirm(BotPanelPropsConfirmRequest) returns (BotPanelPropsConfirmResponse);
 }
+
+message BotPanelPropsConfirmRequest {
+    int32 server_id = 1;
+    int32 type_id = 2;
+    int32 estate_id = 3;
+    bool status = 4;
+  }
+  
+  message BotPanelPropsConfirmResponse {
+    int32 estate_id = 1;
+    string log = 2;
+  }
+  
+  message BotPanelPropsListRequest {
+    int32 server_id = 1;
+  }
+  
+  message BotPanelPropsListResponse {
+    repeated BotPanelPropsListResponseElement props = 1;
+  }
+  
+  message BotPanelPropsListResponseElement {
+    string nickname = 1; 
+    string type = 2;
+    int32 estate_id = 3;
+    google.protobuf.Timestamp date = 4;
+  }
 
 message BotPanelRakBotRequest {
   int32 server_id = 1;

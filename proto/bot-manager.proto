@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 option go_package = "bot-manager/;bot_manager";
+import "google/protobuf/timestamp.proto";
 
 // import "google/protobuf/empty.proto";
 
@@ -10,6 +11,35 @@ service BotManager {
   rpc GetOnline(BotGetOnlineRequest) returns (BotGetOnlineResponse);
   rpc GetOrgMember(BotGetOrgMemberRequest) returns (BotGetOrgMemberResponse);
   rpc RakBot(BotRakBotRequest) returns (BotRakBotResponse);
+  rpc PropsList(BotPropsListRequest) returns (BotPropsListResponse);
+  rpc PropsConfirm(BotPropsConfirmRequest) returns (BotPropsConfirmResponse);
+}
+
+message BotPropsConfirmRequest {
+  int32 server_id = 1;
+  int32 type_id = 2;
+  int32 estate_id = 3;
+  bool status = 4;
+}
+
+message BotPropsConfirmResponse {
+  int32 estate_id = 1;
+  string log = 2;
+}
+
+message BotPropsListRequest {
+  int32 server_id = 1;
+}
+
+message BotPropsListResponse {
+  repeated BotPropsListResponseElement props = 1;
+}
+
+message BotPropsListResponseElement {
+  string nickname = 1; 
+  string type = 2;
+  int32 estate_id = 3;
+  google.protobuf.Timestamp date = 4;
 }
 
 message BotRakBotRequest {

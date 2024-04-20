@@ -29,6 +29,8 @@ type BotPanelClient interface {
 	GetOnline(ctx context.Context, in *BotPanelGetOnlineRequest, opts ...grpc.CallOption) (*BotPanelGetOnlineResponse, error)
 	GetOrgMember(ctx context.Context, in *BotPanelGetOrgMemberRequest, opts ...grpc.CallOption) (*BotPanelGetOrgMemberResponse, error)
 	RakBot(ctx context.Context, in *BotPanelRakBotRequest, opts ...grpc.CallOption) (*BotPanelRakBotResponse, error)
+	PropsList(ctx context.Context, in *BotPanelPropsListRequest, opts ...grpc.CallOption) (*BotPanelPropsListResponse, error)
+	PropsConfirm(ctx context.Context, in *BotPanelPropsConfirmRequest, opts ...grpc.CallOption) (*BotPanelPropsConfirmResponse, error)
 }
 
 type botPanelClient struct {
@@ -93,6 +95,24 @@ func (c *botPanelClient) RakBot(ctx context.Context, in *BotPanelRakBotRequest, 
 	return out, nil
 }
 
+func (c *botPanelClient) PropsList(ctx context.Context, in *BotPanelPropsListRequest, opts ...grpc.CallOption) (*BotPanelPropsListResponse, error) {
+	out := new(BotPanelPropsListResponse)
+	err := c.cc.Invoke(ctx, "/BotPanel/PropsList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botPanelClient) PropsConfirm(ctx context.Context, in *BotPanelPropsConfirmRequest, opts ...grpc.CallOption) (*BotPanelPropsConfirmResponse, error) {
+	out := new(BotPanelPropsConfirmResponse)
+	err := c.cc.Invoke(ctx, "/BotPanel/PropsConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BotPanelServer is the server API for BotPanel service.
 // All implementations should embed UnimplementedBotPanelServer
 // for forward compatibility
@@ -103,6 +123,8 @@ type BotPanelServer interface {
 	GetOnline(context.Context, *BotPanelGetOnlineRequest) (*BotPanelGetOnlineResponse, error)
 	GetOrgMember(context.Context, *BotPanelGetOrgMemberRequest) (*BotPanelGetOrgMemberResponse, error)
 	RakBot(context.Context, *BotPanelRakBotRequest) (*BotPanelRakBotResponse, error)
+	PropsList(context.Context, *BotPanelPropsListRequest) (*BotPanelPropsListResponse, error)
+	PropsConfirm(context.Context, *BotPanelPropsConfirmRequest) (*BotPanelPropsConfirmResponse, error)
 }
 
 // UnimplementedBotPanelServer should be embedded to have forward compatible implementations.
@@ -126,6 +148,12 @@ func (UnimplementedBotPanelServer) GetOrgMember(context.Context, *BotPanelGetOrg
 }
 func (UnimplementedBotPanelServer) RakBot(context.Context, *BotPanelRakBotRequest) (*BotPanelRakBotResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RakBot not implemented")
+}
+func (UnimplementedBotPanelServer) PropsList(context.Context, *BotPanelPropsListRequest) (*BotPanelPropsListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PropsList not implemented")
+}
+func (UnimplementedBotPanelServer) PropsConfirm(context.Context, *BotPanelPropsConfirmRequest) (*BotPanelPropsConfirmResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PropsConfirm not implemented")
 }
 
 // UnsafeBotPanelServer may be embedded to opt out of forward compatibility for this service.
@@ -247,6 +275,42 @@ func _BotPanel_RakBot_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotPanel_PropsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPanelPropsListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotPanelServer).PropsList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotPanel/PropsList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotPanelServer).PropsList(ctx, req.(*BotPanelPropsListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BotPanel_PropsConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPanelPropsConfirmRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotPanelServer).PropsConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotPanel/PropsConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotPanelServer).PropsConfirm(ctx, req.(*BotPanelPropsConfirmRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BotPanel_ServiceDesc is the grpc.ServiceDesc for BotPanel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -277,6 +341,14 @@ var BotPanel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RakBot",
 			Handler:    _BotPanel_RakBot_Handler,
+		},
+		{
+			MethodName: "PropsList",
+			Handler:    _BotPanel_PropsList_Handler,
+		},
+		{
+			MethodName: "PropsConfirm",
+			Handler:    _BotPanel_PropsConfirm_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option go_package = "id/;id";
+
+import "google/protobuf/empty.proto";
+
+service MappingService {
+    rpc MappingBySourceAndUserID(MappingBySourceAndUserIDRequest) returns (MappingBySourceAndUserIDResponse);
+    rpc Create(Mapping) returns (google.protobuf.Empty);
+}
+
+enum MappingSource {
+    discord = 0;
+    grafana = 1;
+}
+
+message Mapping {
+    MappingSource source = 1;
+    string user_id_a = 2;
+    optional int32 user_id_b = 3;
+    optional string user_id_c = 4;
+    optional bytes data = 5;
+}
+
+message MappingBySourceAndUserIDRequest {
+    MappingSource source = 1;
+    string user_id = 2;
+}
+
+message MappingBySourceAndUserIDResponse {
+    repeated Mapping mapping = 1;
+}

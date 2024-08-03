@@ -7,11 +7,14 @@ import "google/protobuf/empty.proto";
 service MappingService {
     rpc MappingBySourceAndUserID(MappingBySourceAndUserIDRequest) returns (MappingBySourceAndUserIDResponse);
     rpc Create(Mapping) returns (google.protobuf.Empty);
+
+    rpc UserIDByCode(UserIDByCodeRequest) returns (UserIDByCodeResponse);
 }
 
 enum MappingSource {
     discord = 0;
     grafana = 1;
+    leader = 2;
 }
 
 message Mapping {
@@ -29,4 +32,13 @@ message MappingBySourceAndUserIDRequest {
 
 message MappingBySourceAndUserIDResponse {
     repeated Mapping mapping = 1;
+}
+
+message UserIDByCodeRequest {
+    MappingSource source = 1;
+    string code = 2;
+}
+
+message UserIDByCodeResponse {
+    string id = 1;
 }

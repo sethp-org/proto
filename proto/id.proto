@@ -9,6 +9,7 @@ service MappingService {
     rpc Create(Mapping) returns (google.protobuf.Empty);
 
     rpc UserIDByCode(UserIDByCodeRequest) returns (UserIDByCodeResponse);
+    rpc UserByID(UserIDUserByIDRequest) returns (UserIDUserByIDResponse);
 }
 
 enum MappingSource {
@@ -41,4 +42,20 @@ message UserIDByCodeRequest {
 
 message UserIDByCodeResponse {
     string id = 1;
+}
+
+message UserIDUserByIDRequest {
+    string id = 1;
+}
+
+message UserIDUserByIDResponse {
+    UserIDUser user = 1;
+}
+
+message UserIDUser {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string given_name = 4;
+    string family_name = 5;
 }

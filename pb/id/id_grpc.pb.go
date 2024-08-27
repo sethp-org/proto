@@ -26,6 +26,7 @@ type MappingServiceClient interface {
 	MappingBySourceAndUserID(ctx context.Context, in *MappingBySourceAndUserIDRequest, opts ...grpc.CallOption) (*MappingBySourceAndUserIDResponse, error)
 	Create(ctx context.Context, in *Mapping, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UserIDByCode(ctx context.Context, in *UserIDByCodeRequest, opts ...grpc.CallOption) (*UserIDByCodeResponse, error)
+	UserByID(ctx context.Context, in *UserIDUserByIDRequest, opts ...grpc.CallOption) (*UserIDUserByIDResponse, error)
 }
 
 type mappingServiceClient struct {
@@ -63,6 +64,15 @@ func (c *mappingServiceClient) UserIDByCode(ctx context.Context, in *UserIDByCod
 	return out, nil
 }
 
+func (c *mappingServiceClient) UserByID(ctx context.Context, in *UserIDUserByIDRequest, opts ...grpc.CallOption) (*UserIDUserByIDResponse, error) {
+	out := new(UserIDUserByIDResponse)
+	err := c.cc.Invoke(ctx, "/MappingService/UserByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MappingServiceServer is the server API for MappingService service.
 // All implementations should embed UnimplementedMappingServiceServer
 // for forward compatibility
@@ -70,6 +80,7 @@ type MappingServiceServer interface {
 	MappingBySourceAndUserID(context.Context, *MappingBySourceAndUserIDRequest) (*MappingBySourceAndUserIDResponse, error)
 	Create(context.Context, *Mapping) (*emptypb.Empty, error)
 	UserIDByCode(context.Context, *UserIDByCodeRequest) (*UserIDByCodeResponse, error)
+	UserByID(context.Context, *UserIDUserByIDRequest) (*UserIDUserByIDResponse, error)
 }
 
 // UnimplementedMappingServiceServer should be embedded to have forward compatible implementations.
@@ -84,6 +95,9 @@ func (UnimplementedMappingServiceServer) Create(context.Context, *Mapping) (*emp
 }
 func (UnimplementedMappingServiceServer) UserIDByCode(context.Context, *UserIDByCodeRequest) (*UserIDByCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserIDByCode not implemented")
+}
+func (UnimplementedMappingServiceServer) UserByID(context.Context, *UserIDUserByIDRequest) (*UserIDUserByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserByID not implemented")
 }
 
 // UnsafeMappingServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -151,6 +165,24 @@ func _MappingService_UserIDByCode_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MappingService_UserByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserIDUserByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MappingServiceServer).UserByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/MappingService/UserByID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MappingServiceServer).UserByID(ctx, req.(*UserIDUserByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MappingService_ServiceDesc is the grpc.ServiceDesc for MappingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -169,6 +201,10 @@ var MappingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserIDByCode",
 			Handler:    _MappingService_UserIDByCode_Handler,
+		},
+		{
+			MethodName: "UserByID",
+			Handler:    _MappingService_UserByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

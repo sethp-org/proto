@@ -3,10 +3,13 @@ syntax = "proto3";
 option go_package = "site-backend/;site_backend";
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 import "log.proto";
+
 
 service SiteBackend {
   rpc SendLogs(SendLogsRequest) returns (google.protobuf.Empty);
+  rpc SendLogsV2(SendLogsRequestV2) returns (google.protobuf.Empty);
   rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 }
 
@@ -15,6 +18,19 @@ message SendLogsRequest {
     repeated LogEntry logs = 2;
     int32 user_id = 3;
     int32 server_id = 4;
+}
+
+message SendLogsRequestV2 {
+    int32 user_id = 1;
+    int32 server_id = 2;
+    google.protobuf.Timestamp date = 3;
+    repeated LogEntry reports = 4;
+    repeated LogEntry bans = 5;
+    repeated LogEntry mutes = 6;
+    repeated LogEntry kicks = 7;
+    repeated LogEntry jails = 8;
+    repeated LogEntry onlines = 9;
+    int32 online_seconds = 10;
 }
 
 message GetUsersRequest {

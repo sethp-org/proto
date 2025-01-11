@@ -18,9 +18,10 @@ service BotManager {
 }
 
 message BotDialogSendRequest {
-  bool confirm = 1;
-  int32 list_index = 2;
-  string input = 3;
+  int32 server_id = 1;
+  bool confirm = 2;
+  int32 list_index = 3;
+  string input = 4;
 }
 
 message BotPropsConfirmRequest {

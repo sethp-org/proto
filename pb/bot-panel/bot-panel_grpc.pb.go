@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 )
 
@@ -30,7 +31,7 @@ type BotPanelClient interface {
 	GetOrgMember(ctx context.Context, in *BotPanelGetOrgMemberRequest, opts ...grpc.CallOption) (*BotPanelGetOrgMemberResponse, error)
 	RakBot(ctx context.Context, in *BotPanelRakBotRequest, opts ...grpc.CallOption) (*BotPanelRakBotResponse, error)
 	PropsList(ctx context.Context, in *BotPanelPropsListRequest, opts ...grpc.CallOption) (*BotPanelPropsListResponse, error)
-	PropsConfirm(ctx context.Context, in *BotPanelPropsConfirmRequest, opts ...grpc.CallOption) (*BotPanelPropsConfirmResponse, error)
+	DialogSend(ctx context.Context, in *BotPanelDialogSendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type botPanelClient struct {
@@ -104,9 +105,9 @@ func (c *botPanelClient) PropsList(ctx context.Context, in *BotPanelPropsListReq
 	return out, nil
 }
 
-func (c *botPanelClient) PropsConfirm(ctx context.Context, in *BotPanelPropsConfirmRequest, opts ...grpc.CallOption) (*BotPanelPropsConfirmResponse, error) {
-	out := new(BotPanelPropsConfirmResponse)
-	err := c.cc.Invoke(ctx, "/BotPanel/PropsConfirm", in, out, opts...)
+func (c *botPanelClient) DialogSend(ctx context.Context, in *BotPanelDialogSendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/BotPanel/DialogSend", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +125,7 @@ type BotPanelServer interface {
 	GetOrgMember(context.Context, *BotPanelGetOrgMemberRequest) (*BotPanelGetOrgMemberResponse, error)
 	RakBot(context.Context, *BotPanelRakBotRequest) (*BotPanelRakBotResponse, error)
 	PropsList(context.Context, *BotPanelPropsListRequest) (*BotPanelPropsListResponse, error)
-	PropsConfirm(context.Context, *BotPanelPropsConfirmRequest) (*BotPanelPropsConfirmResponse, error)
+	DialogSend(context.Context, *BotPanelDialogSendRequest) (*emptypb.Empty, error)
 }
 
 // UnimplementedBotPanelServer should be embedded to have forward compatible implementations.
@@ -152,8 +153,8 @@ func (UnimplementedBotPanelServer) RakBot(context.Context, *BotPanelRakBotReques
 func (UnimplementedBotPanelServer) PropsList(context.Context, *BotPanelPropsListRequest) (*BotPanelPropsListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PropsList not implemented")
 }
-func (UnimplementedBotPanelServer) PropsConfirm(context.Context, *BotPanelPropsConfirmRequest) (*BotPanelPropsConfirmResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PropsConfirm not implemented")
+func (UnimplementedBotPanelServer) DialogSend(context.Context, *BotPanelDialogSendRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DialogSend not implemented")
 }
 
 // UnsafeBotPanelServer may be embedded to opt out of forward compatibility for this service.
@@ -293,20 +294,20 @@ func _BotPanel_PropsList_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BotPanel_PropsConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BotPanelPropsConfirmRequest)
+func _BotPanel_DialogSend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPanelDialogSendRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BotPanelServer).PropsConfirm(ctx, in)
+		return srv.(BotPanelServer).DialogSend(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/BotPanel/PropsConfirm",
+		FullMethod: "/BotPanel/DialogSend",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BotPanelServer).PropsConfirm(ctx, req.(*BotPanelPropsConfirmRequest))
+		return srv.(BotPanelServer).DialogSend(ctx, req.(*BotPanelDialogSendRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -347,8 +348,8 @@ var BotPanel_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BotPanel_PropsList_Handler,
 		},
 		{
-			MethodName: "PropsConfirm",
-			Handler:    _BotPanel_PropsConfirm_Handler,
+			MethodName: "DialogSend",
+			Handler:    _BotPanel_DialogSend_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

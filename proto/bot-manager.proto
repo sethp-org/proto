@@ -2,6 +2,7 @@ syntax = "proto3";
 
 option go_package = "bot-manager/;bot_manager";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 // import "google/protobuf/empty.proto";
 
@@ -13,6 +14,13 @@ service BotManager {
   rpc RakBot(BotRakBotRequest) returns (BotRakBotResponse);
   rpc PropsList(BotPropsListRequest) returns (BotPropsListResponse);
   rpc PropsConfirm(BotPropsConfirmRequest) returns (BotPropsConfirmResponse);
+  rpc DialogSend(BotDialogSendRequest) returns (google.protobuf.Empty);
+}
+
+message BotDialogSendRequest {
+  bool confirm = 1;
+  int32 list_index = 2;
+  string input = 3;
 }
 
 message BotPropsConfirmRequest {

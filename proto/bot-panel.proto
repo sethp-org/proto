@@ -4,6 +4,7 @@ option go_package = "bot-panel/;bot_panel";
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 service BotPanel {
   rpc SendCommand(SendVKCommandRequest) returns (SendVKCommandResponse);
@@ -13,7 +14,13 @@ service BotPanel {
   rpc GetOrgMember(BotPanelGetOrgMemberRequest) returns (BotPanelGetOrgMemberResponse);
   rpc RakBot(BotPanelRakBotRequest) returns (BotPanelRakBotResponse);
   rpc PropsList(BotPanelPropsListRequest) returns (BotPanelPropsListResponse);
-  rpc PropsConfirm(BotPanelPropsConfirmRequest) returns (BotPanelPropsConfirmResponse);
+  rpc DialogSend(BotPanelDialogSendRequest) returns (google.protobuf.Empty);
+}
+
+message BotPanelDialogSendRequest {
+  bool confirm = 1;
+  int32 list_index = 2;
+  string input = 3;
 }
 
 message BotPanelPropsConfirmRequest {

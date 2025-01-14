@@ -31,6 +31,7 @@ type BotPanelClient interface {
 	GetOrgMember(ctx context.Context, in *BotPanelGetOrgMemberRequest, opts ...grpc.CallOption) (*BotPanelGetOrgMemberResponse, error)
 	RakBot(ctx context.Context, in *BotPanelRakBotRequest, opts ...grpc.CallOption) (*BotPanelRakBotResponse, error)
 	PropsList(ctx context.Context, in *BotPanelPropsListRequest, opts ...grpc.CallOption) (*BotPanelPropsListResponse, error)
+	PropsConfirm(ctx context.Context, in *BotPanelPropsConfirmRequest, opts ...grpc.CallOption) (*BotPanelPropsConfirmResponse, error)
 	DialogSend(ctx context.Context, in *BotPanelDialogSendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -105,6 +106,15 @@ func (c *botPanelClient) PropsList(ctx context.Context, in *BotPanelPropsListReq
 	return out, nil
 }
 
+func (c *botPanelClient) PropsConfirm(ctx context.Context, in *BotPanelPropsConfirmRequest, opts ...grpc.CallOption) (*BotPanelPropsConfirmResponse, error) {
+	out := new(BotPanelPropsConfirmResponse)
+	err := c.cc.Invoke(ctx, "/BotPanel/PropsConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *botPanelClient) DialogSend(ctx context.Context, in *BotPanelDialogSendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/BotPanel/DialogSend", in, out, opts...)
@@ -125,6 +135,7 @@ type BotPanelServer interface {
 	GetOrgMember(context.Context, *BotPanelGetOrgMemberRequest) (*BotPanelGetOrgMemberResponse, error)
 	RakBot(context.Context, *BotPanelRakBotRequest) (*BotPanelRakBotResponse, error)
 	PropsList(context.Context, *BotPanelPropsListRequest) (*BotPanelPropsListResponse, error)
+	PropsConfirm(context.Context, *BotPanelPropsConfirmRequest) (*BotPanelPropsConfirmResponse, error)
 	DialogSend(context.Context, *BotPanelDialogSendRequest) (*emptypb.Empty, error)
 }
 
@@ -152,6 +163,9 @@ func (UnimplementedBotPanelServer) RakBot(context.Context, *BotPanelRakBotReques
 }
 func (UnimplementedBotPanelServer) PropsList(context.Context, *BotPanelPropsListRequest) (*BotPanelPropsListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PropsList not implemented")
+}
+func (UnimplementedBotPanelServer) PropsConfirm(context.Context, *BotPanelPropsConfirmRequest) (*BotPanelPropsConfirmResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PropsConfirm not implemented")
 }
 func (UnimplementedBotPanelServer) DialogSend(context.Context, *BotPanelDialogSendRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DialogSend not implemented")
@@ -294,6 +308,24 @@ func _BotPanel_PropsList_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotPanel_PropsConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPanelPropsConfirmRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotPanelServer).PropsConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotPanel/PropsConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotPanelServer).PropsConfirm(ctx, req.(*BotPanelPropsConfirmRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _BotPanel_DialogSend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BotPanelDialogSendRequest)
 	if err := dec(in); err != nil {
@@ -346,6 +378,10 @@ var BotPanel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PropsList",
 			Handler:    _BotPanel_PropsList_Handler,
+		},
+		{
+			MethodName: "PropsConfirm",
+			Handler:    _BotPanel_PropsConfirm_Handler,
 		},
 		{
 			MethodName: "DialogSend",

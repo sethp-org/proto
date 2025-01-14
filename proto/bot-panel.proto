@@ -14,6 +14,7 @@ service BotPanel {
   rpc GetOrgMember(BotPanelGetOrgMemberRequest) returns (BotPanelGetOrgMemberResponse);
   rpc RakBot(BotPanelRakBotRequest) returns (BotPanelRakBotResponse);
   rpc PropsList(BotPanelPropsListRequest) returns (BotPanelPropsListResponse);
+  rpc PropsConfirm(BotPanelPropsConfirmRequest) returns (BotPanelPropsConfirmResponse);
   rpc DialogSend(BotPanelDialogSendRequest) returns (google.protobuf.Empty);
 }
 

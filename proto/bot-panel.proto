@@ -16,7 +16,44 @@ service BotPanel {
   rpc PropsList(BotPanelPropsListRequest) returns (BotPanelPropsListResponse);
   rpc PropsConfirm(BotPanelPropsConfirmRequest) returns (BotPanelPropsConfirmResponse);
   rpc DialogSend(BotPanelDialogSendRequest) returns (google.protobuf.Empty);
+  rpc GetID(BotPanelGetIDRequest) returns (BotPanelGetIDResponse);
+  rpc GetOrgMembers(BotPanelGetOrgMembersRequest) returns (BotPanelGetOrgMembersResponse);
 }
+
+message BotPanelGetOrgMembersRequest {
+  int32 server_id = 1;
+}
+
+message BotPanelGetOrgMembersResponse {
+  repeated BotPanelGetOrgMembersItem items = 1;
+}
+
+message BotPanelGetOrgMembersItem {
+  int32 organization_id = 1;
+  string organization_name = 2;
+  string leader_name = 3;
+  int32 leader_id = 4;
+  int32 deputy_count = 5;
+  int32 member_count = 6;
+  int32 member_afk_count = 7;
+  string raw = 8;
+}
+
+message BotPanelGetIDRequest {
+  int32 server_id = 1;
+  string identificator = 2;
+}
+
+message BotPanelGetIDResponse {
+  int32 id = 1;
+  string nickname = 2;
+  string level = 3;
+  int64 uid = 4;
+  float packet_loss = 5;
+  string client = 6;
+  optional string error = 7;
+}
+
 
 message BotPanelDialogSendRequest {
   int32 server_id = 1;

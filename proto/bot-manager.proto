@@ -7,7 +7,9 @@ import "google/protobuf/empty.proto";
 // import "google/protobuf/empty.proto";
 
 service BotManager {
-  rpc SendCommand(SendBotCommandRequest) returns (SendBotCommandResponse);
+  rpc SendCommand(SendBotCommandRequest) returns (SendBotCommandResponse) {
+    option deprecated = true;
+  };
   rpc SendCommandV2(SendBotCommandV2Request) returns (SendBotCommandV2Response);
   rpc GetOnline(BotGetOnlineRequest) returns (BotGetOnlineResponse);
   rpc GetOrgMember(BotGetOrgMemberRequest) returns (BotGetOrgMemberResponse);
@@ -15,6 +17,42 @@ service BotManager {
   rpc PropsList(BotPropsListRequest) returns (BotPropsListResponse);
   rpc PropsConfirm(BotPropsConfirmRequest) returns (BotPropsConfirmResponse);
   rpc DialogSend(BotDialogSendRequest) returns (google.protobuf.Empty);
+  rpc GetID(BotGetIDRequest) returns (BotGetIDResponse);
+  rpc GetOrgMembers(BotGetOrgMembersRequest) returns (BotGetOrgMembersResponse);
+}
+
+message BotGetOrgMembersRequest {
+  int32 server_id = 1;
+}
+
+message BotGetOrgMembersResponse {
+  repeated BotGetOrgMembersItem items = 1;
+}
+
+message BotGetOrgMembersItem {
+  int32 organization_id = 1;
+  string organization_name = 2;
+  string leader_name = 3;
+  int32 leader_id = 4;
+  int32 deputy_count = 5;
+  int32 member_count = 6;
+  int32 member_afk_count = 7;
+  string raw = 8;
+}
+
+message BotGetIDRequest {
+  int32 server_id = 1;
+  string identificator = 2;
+}
+
+message BotGetIDResponse {
+  int32 id = 1;
+  string nickname = 2;
+  string level = 3;
+  int64 uid = 4;
+  float packet_loss = 5;
+  string client = 6;
+  optional string error = 7;
 }
 
 message BotDialogSendRequest {

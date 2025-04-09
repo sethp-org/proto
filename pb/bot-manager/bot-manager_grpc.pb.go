@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BotManagerClient interface {
+	// Deprecated: Do not use.
 	SendCommand(ctx context.Context, in *SendBotCommandRequest, opts ...grpc.CallOption) (*SendBotCommandResponse, error)
 	SendCommandV2(ctx context.Context, in *SendBotCommandV2Request, opts ...grpc.CallOption) (*SendBotCommandV2Response, error)
 	GetOnline(ctx context.Context, in *BotGetOnlineRequest, opts ...grpc.CallOption) (*BotGetOnlineResponse, error)
@@ -31,6 +32,8 @@ type BotManagerClient interface {
 	PropsList(ctx context.Context, in *BotPropsListRequest, opts ...grpc.CallOption) (*BotPropsListResponse, error)
 	PropsConfirm(ctx context.Context, in *BotPropsConfirmRequest, opts ...grpc.CallOption) (*BotPropsConfirmResponse, error)
 	DialogSend(ctx context.Context, in *BotDialogSendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetID(ctx context.Context, in *BotGetIDRequest, opts ...grpc.CallOption) (*BotGetIDResponse, error)
+	GetOrgMembers(ctx context.Context, in *BotGetOrgMembersRequest, opts ...grpc.CallOption) (*BotGetOrgMembersResponse, error)
 }
 
 type botManagerClient struct {
@@ -41,6 +44,7 @@ func NewBotManagerClient(cc grpc.ClientConnInterface) BotManagerClient {
 	return &botManagerClient{cc}
 }
 
+// Deprecated: Do not use.
 func (c *botManagerClient) SendCommand(ctx context.Context, in *SendBotCommandRequest, opts ...grpc.CallOption) (*SendBotCommandResponse, error) {
 	out := new(SendBotCommandResponse)
 	err := c.cc.Invoke(ctx, "/BotManager/SendCommand", in, out, opts...)
@@ -113,10 +117,29 @@ func (c *botManagerClient) DialogSend(ctx context.Context, in *BotDialogSendRequ
 	return out, nil
 }
 
+func (c *botManagerClient) GetID(ctx context.Context, in *BotGetIDRequest, opts ...grpc.CallOption) (*BotGetIDResponse, error) {
+	out := new(BotGetIDResponse)
+	err := c.cc.Invoke(ctx, "/BotManager/GetID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botManagerClient) GetOrgMembers(ctx context.Context, in *BotGetOrgMembersRequest, opts ...grpc.CallOption) (*BotGetOrgMembersResponse, error) {
+	out := new(BotGetOrgMembersResponse)
+	err := c.cc.Invoke(ctx, "/BotManager/GetOrgMembers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BotManagerServer is the server API for BotManager service.
 // All implementations should embed UnimplementedBotManagerServer
 // for forward compatibility
 type BotManagerServer interface {
+	// Deprecated: Do not use.
 	SendCommand(context.Context, *SendBotCommandRequest) (*SendBotCommandResponse, error)
 	SendCommandV2(context.Context, *SendBotCommandV2Request) (*SendBotCommandV2Response, error)
 	GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error)
@@ -125,6 +148,8 @@ type BotManagerServer interface {
 	PropsList(context.Context, *BotPropsListRequest) (*BotPropsListResponse, error)
 	PropsConfirm(context.Context, *BotPropsConfirmRequest) (*BotPropsConfirmResponse, error)
 	DialogSend(context.Context, *BotDialogSendRequest) (*emptypb.Empty, error)
+	GetID(context.Context, *BotGetIDRequest) (*BotGetIDResponse, error)
+	GetOrgMembers(context.Context, *BotGetOrgMembersRequest) (*BotGetOrgMembersResponse, error)
 }
 
 // UnimplementedBotManagerServer should be embedded to have forward compatible implementations.
@@ -154,6 +179,12 @@ func (UnimplementedBotManagerServer) PropsConfirm(context.Context, *BotPropsConf
 }
 func (UnimplementedBotManagerServer) DialogSend(context.Context, *BotDialogSendRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DialogSend not implemented")
+}
+func (UnimplementedBotManagerServer) GetID(context.Context, *BotGetIDRequest) (*BotGetIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetID not implemented")
+}
+func (UnimplementedBotManagerServer) GetOrgMembers(context.Context, *BotGetOrgMembersRequest) (*BotGetOrgMembersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrgMembers not implemented")
 }
 
 // UnsafeBotManagerServer may be embedded to opt out of forward compatibility for this service.
@@ -311,6 +342,42 @@ func _BotManager_DialogSend_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotManager_GetID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotGetIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).GetID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/GetID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).GetID(ctx, req.(*BotGetIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BotManager_GetOrgMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotGetOrgMembersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).GetOrgMembers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/GetOrgMembers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).GetOrgMembers(ctx, req.(*BotGetOrgMembersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BotManager_ServiceDesc is the grpc.ServiceDesc for BotManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -349,6 +416,14 @@ var BotManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DialogSend",
 			Handler:    _BotManager_DialogSend_Handler,
+		},
+		{
+			MethodName: "GetID",
+			Handler:    _BotManager_GetID_Handler,
+		},
+		{
+			MethodName: "GetOrgMembers",
+			Handler:    _BotManager_GetOrgMembers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

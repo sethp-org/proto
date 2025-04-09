@@ -33,6 +33,8 @@ type BotPanelClient interface {
 	PropsList(ctx context.Context, in *BotPanelPropsListRequest, opts ...grpc.CallOption) (*BotPanelPropsListResponse, error)
 	PropsConfirm(ctx context.Context, in *BotPanelPropsConfirmRequest, opts ...grpc.CallOption) (*BotPanelPropsConfirmResponse, error)
 	DialogSend(ctx context.Context, in *BotPanelDialogSendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetID(ctx context.Context, in *BotPanelGetIDRequest, opts ...grpc.CallOption) (*BotPanelGetIDResponse, error)
+	GetOrgMembers(ctx context.Context, in *BotPanelGetOrgMembersRequest, opts ...grpc.CallOption) (*BotPanelGetOrgMembersResponse, error)
 }
 
 type botPanelClient struct {
@@ -124,6 +126,24 @@ func (c *botPanelClient) DialogSend(ctx context.Context, in *BotPanelDialogSendR
 	return out, nil
 }
 
+func (c *botPanelClient) GetID(ctx context.Context, in *BotPanelGetIDRequest, opts ...grpc.CallOption) (*BotPanelGetIDResponse, error) {
+	out := new(BotPanelGetIDResponse)
+	err := c.cc.Invoke(ctx, "/BotPanel/GetID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botPanelClient) GetOrgMembers(ctx context.Context, in *BotPanelGetOrgMembersRequest, opts ...grpc.CallOption) (*BotPanelGetOrgMembersResponse, error) {
+	out := new(BotPanelGetOrgMembersResponse)
+	err := c.cc.Invoke(ctx, "/BotPanel/GetOrgMembers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BotPanelServer is the server API for BotPanel service.
 // All implementations should embed UnimplementedBotPanelServer
 // for forward compatibility
@@ -137,6 +157,8 @@ type BotPanelServer interface {
 	PropsList(context.Context, *BotPanelPropsListRequest) (*BotPanelPropsListResponse, error)
 	PropsConfirm(context.Context, *BotPanelPropsConfirmRequest) (*BotPanelPropsConfirmResponse, error)
 	DialogSend(context.Context, *BotPanelDialogSendRequest) (*emptypb.Empty, error)
+	GetID(context.Context, *BotPanelGetIDRequest) (*BotPanelGetIDResponse, error)
+	GetOrgMembers(context.Context, *BotPanelGetOrgMembersRequest) (*BotPanelGetOrgMembersResponse, error)
 }
 
 // UnimplementedBotPanelServer should be embedded to have forward compatible implementations.
@@ -169,6 +191,12 @@ func (UnimplementedBotPanelServer) PropsConfirm(context.Context, *BotPanelPropsC
 }
 func (UnimplementedBotPanelServer) DialogSend(context.Context, *BotPanelDialogSendRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DialogSend not implemented")
+}
+func (UnimplementedBotPanelServer) GetID(context.Context, *BotPanelGetIDRequest) (*BotPanelGetIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetID not implemented")
+}
+func (UnimplementedBotPanelServer) GetOrgMembers(context.Context, *BotPanelGetOrgMembersRequest) (*BotPanelGetOrgMembersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrgMembers not implemented")
 }
 
 // UnsafeBotPanelServer may be embedded to opt out of forward compatibility for this service.
@@ -344,6 +372,42 @@ func _BotPanel_DialogSend_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BotPanel_GetID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPanelGetIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotPanelServer).GetID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotPanel/GetID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotPanelServer).GetID(ctx, req.(*BotPanelGetIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BotPanel_GetOrgMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotPanelGetOrgMembersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotPanelServer).GetOrgMembers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotPanel/GetOrgMembers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotPanelServer).GetOrgMembers(ctx, req.(*BotPanelGetOrgMembersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BotPanel_ServiceDesc is the grpc.ServiceDesc for BotPanel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -386,6 +450,14 @@ var BotPanel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DialogSend",
 			Handler:    _BotPanel_DialogSend_Handler,
+		},
+		{
+			MethodName: "GetID",
+			Handler:    _BotPanel_GetID_Handler,
+		},
+		{
+			MethodName: "GetOrgMembers",
+			Handler:    _BotPanel_GetOrgMembers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

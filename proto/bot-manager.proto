@@ -48,7 +48,7 @@ message BotGetIDRequest {
 message BotGetIDResponse {
   int32 id = 1;
   string nickname = 2;
-  string level = 3;
+  int32 level = 3;
   int64 uid = 4;
   float packet_loss = 5;
   string client = 6;

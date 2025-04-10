@@ -22,6 +22,7 @@ service BotPanel {
 
 message BotPanelGetOrgMembersRequest {
   int32 server_id = 1;
+  optional string error = 2;
 }
 
 message BotPanelGetOrgMembersResponse {

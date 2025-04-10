@@ -27,6 +27,7 @@ message BotGetOrgMembersRequest {
 
 message BotGetOrgMembersResponse {
   repeated BotGetOrgMembersItem items = 1;
+  optional string error = 2;
 }
 
 message BotGetOrgMembersItem {

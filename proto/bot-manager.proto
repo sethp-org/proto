@@ -14,6 +14,7 @@ service BotManager {
   rpc GetOnline(BotGetOnlineRequest) returns (BotGetOnlineResponse);
   rpc GetOrgMember(BotGetOrgMemberRequest) returns (BotGetOrgMemberResponse);
   rpc RakBot(BotRakBotRequest) returns (BotRakBotResponse);
+  rpc RakBotV2(BotRakBotV2Request) returns (BotRakBotV2Response);
   rpc PropsList(BotPropsListRequest) returns (BotPropsListResponse);
   rpc PropsConfirm(BotPropsConfirmRequest) returns (BotPropsConfirmResponse);
   rpc DialogSend(BotDialogSendRequest) returns (google.protobuf.Empty);
@@ -99,6 +100,19 @@ message BotRakBotRequest {
 message BotRakBotResponse {
   bool success = 1;
   string nickname = 2;
+}
+
+message BotRakBotV2Request {
+  int32 server_id = 1;
+  string nickname = 2;
+  string ip = 3;
+}
+
+message BotRakBotV2Response {
+  bool success = 1;
+  string nickname = 2;
+  string ip = 3;
+  repeated string ips = 4;
 }
 
 message SendBotCommandRequest { 

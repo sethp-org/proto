@@ -29,6 +29,7 @@ type BotManagerClient interface {
 	GetOnline(ctx context.Context, in *BotGetOnlineRequest, opts ...grpc.CallOption) (*BotGetOnlineResponse, error)
 	GetOrgMember(ctx context.Context, in *BotGetOrgMemberRequest, opts ...grpc.CallOption) (*BotGetOrgMemberResponse, error)
 	RakBot(ctx context.Context, in *BotRakBotRequest, opts ...grpc.CallOption) (*BotRakBotResponse, error)
+	RakBotV2(ctx context.Context, in *BotRakBotV2Request, opts ...grpc.CallOption) (*BotRakBotV2Response, error)
 	PropsList(ctx context.Context, in *BotPropsListRequest, opts ...grpc.CallOption) (*BotPropsListResponse, error)
 	PropsConfirm(ctx context.Context, in *BotPropsConfirmRequest, opts ...grpc.CallOption) (*BotPropsConfirmResponse, error)
 	DialogSend(ctx context.Context, in *BotDialogSendRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -90,6 +91,15 @@ func (c *botManagerClient) RakBot(ctx context.Context, in *BotRakBotRequest, opt
 	return out, nil
 }
 
+func (c *botManagerClient) RakBotV2(ctx context.Context, in *BotRakBotV2Request, opts ...grpc.CallOption) (*BotRakBotV2Response, error) {
+	out := new(BotRakBotV2Response)
+	err := c.cc.Invoke(ctx, "/BotManager/RakBotV2", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *botManagerClient) PropsList(ctx context.Context, in *BotPropsListRequest, opts ...grpc.CallOption) (*BotPropsListResponse, error) {
 	out := new(BotPropsListResponse)
 	err := c.cc.Invoke(ctx, "/BotManager/PropsList", in, out, opts...)
@@ -145,6 +155,7 @@ type BotManagerServer interface {
 	GetOnline(context.Context, *BotGetOnlineRequest) (*BotGetOnlineResponse, error)
 	GetOrgMember(context.Context, *BotGetOrgMemberRequest) (*BotGetOrgMemberResponse, error)
 	RakBot(context.Context, *BotRakBotRequest) (*BotRakBotResponse, error)
+	RakBotV2(context.Context, *BotRakBotV2Request) (*BotRakBotV2Response, error)
 	PropsList(context.Context, *BotPropsListRequest) (*BotPropsListResponse, error)
 	PropsConfirm(context.Context, *BotPropsConfirmRequest) (*BotPropsConfirmResponse, error)
 	DialogSend(context.Context, *BotDialogSendRequest) (*emptypb.Empty, error)
@@ -170,6 +181,9 @@ func (UnimplementedBotManagerServer) GetOrgMember(context.Context, *BotGetOrgMem
 }
 func (UnimplementedBotManagerServer) RakBot(context.Context, *BotRakBotRequest) (*BotRakBotResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RakBot not implemented")
+}
+func (UnimplementedBotManagerServer) RakBotV2(context.Context, *BotRakBotV2Request) (*BotRakBotV2Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RakBotV2 not implemented")
 }
 func (UnimplementedBotManagerServer) PropsList(context.Context, *BotPropsListRequest) (*BotPropsListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PropsList not implemented")
@@ -284,6 +298,24 @@ func _BotManager_RakBot_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BotManagerServer).RakBot(ctx, req.(*BotRakBotRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BotManager_RakBotV2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BotRakBotV2Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotManagerServer).RakBotV2(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BotManager/RakBotV2",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotManagerServer).RakBotV2(ctx, req.(*BotRakBotV2Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -404,6 +436,10 @@ var BotManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RakBot",
 			Handler:    _BotManager_RakBot_Handler,
+		},
+		{
+			MethodName: "RakBotV2",
+			Handler:    _BotManager_RakBotV2_Handler,
 		},
 		{
 			MethodName: "PropsList",
